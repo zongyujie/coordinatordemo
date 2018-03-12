@@ -27,7 +27,7 @@
             android:fitsSystemWindows="true"
             android:background="#FFFFFF"
             app:contentScrim="#FFFFFF"
-            app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:collapsedTitleGravity="center"
             app:statusBarScrim="#FFFFFF"
             >
