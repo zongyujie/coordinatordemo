@@ -1,6 +1,7 @@
 package com.zhmf.coordinator;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +24,6 @@ public class ListFragment extends NewBaseFragment {
     RecyclerView mRecyclerView;
     private static final String KEY = "key";
     private String title = "测试";
-
     List<String> mDatas = new ArrayList<>();
     private ItemAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -35,7 +35,10 @@ public class ListFragment extends NewBaseFragment {
         fragment.setArguments(bundle);
         return fragment;
     }
-
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_list;
+    }
     @Override
     protected void initView(View view) {
         Bundle arguments = getArguments();
@@ -69,9 +72,48 @@ public class ListFragment extends NewBaseFragment {
                 }, 1200);
             }
         });
+        initLoadMoreListener();
+    }
 
+    private void initLoadMoreListener() {
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastVisibleItem ;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //判断RecyclerView的状态 是空闲时，同时，是最后一个可见的ITEM时才加载
+                if(newState==RecyclerView.SCROLL_STATE_IDLE&&lastVisibleItem+1==mAdapter.getItemCount()){
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            List<String> footerDatas = new ArrayList<String>();
+                            for (int i = 0; i< 10; i++) {
+                                footerDatas.add("footer  item" + i);
+                            }
+                            mAdapter.addDates(footerDatas);
+                            Toast.makeText(getContext(), "更新了 "+footerDatas.size()+" 条目数据", Toast.LENGTH_SHORT).show();
+                        }
+                    }, 3000);
+
+
+                }
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                //最后一个可见的ITEM
+                lastVisibleItem=layoutManager.findLastVisibleItemPosition();
+            }
+        });
 
     }
+
+
 
     public void tooglePager(boolean isOpen) {
         if (isOpen) {
@@ -100,10 +142,7 @@ public class ListFragment extends NewBaseFragment {
 
     }
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_list;
-    }
+
 
     @Override
     public void fetchData() {

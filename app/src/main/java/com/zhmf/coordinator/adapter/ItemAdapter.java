@@ -23,6 +23,6 @@ public class ItemAdapter extends BaseRecyclerAdapter<String> {
     public void convert(BaseRecyclerHolder holder, String item, int position) {
         TextView tv=holder.getView(R.id.tv);
         tv.setText(item);
-
     }
+
 }

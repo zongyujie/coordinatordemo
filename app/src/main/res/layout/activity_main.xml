@@ -16,7 +16,10 @@
         theme="@style/ThemeOverlay.AppCompat.Light"
         android:background="#F1F3F8"
         >
-
+<!--scroll - 想滚动就必须设置这个。
+ enterAlways - 实现quick return效果, 当向下移动时，立即显示View（比如Toolbar)。
+ exitUntilCollapsed - 向上滚动时收缩View，但可以固定Toolbar一直在上面。
+ enterAlwaysCollapsed - 当你的View已经设置minHeight属性又使用此标志时，你的View只能以最小高度进入，只有当滚动视图到达顶部时才扩大到完整高度。-->
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing"
             android:layout_width="match_parent"
@@ -24,7 +27,7 @@
             android:fitsSystemWindows="true"
             android:background="#FFFFFF"
             app:contentScrim="#FFFFFF"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
             app:collapsedTitleGravity="center"
             app:statusBarScrim="#FFFFFF"
             >
@@ -137,6 +140,7 @@
                     android:layout_gravity="right"
                     >
                     <TextView
+                        android:id="@+id/tv_edit"
                         android:text="编辑"
                         android:gravity="center"
                         android:layout_width="wrap_content"
@@ -146,6 +150,7 @@
                         />
 
                     <ImageView
+                        android:id="@+id/iv_card"
                         android:background="@drawable/iv_business_card"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
